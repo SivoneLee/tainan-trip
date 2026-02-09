@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>台南同遊 2/18–2/21</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- 你之後可以換字體；先用 Noto Sans TC -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="hero__bg"></div>
+      <div class="hero__content">
+        <div class="hero__top">
+          <div class="badge">2/18–2/21・台南同遊</div>
+          <button id="btnShare" class="iconBtn" title="複製連結">⤴︎</button>
+        </div>
+        <h1 id="tripTitle">台南：老城散步＋水道博物館＋四草綠隧</h1>
+        <p id="tripSubtitle">朋友同遊版（可掛 GitHub Pages）</p>
+        <div id="chipRow" class="chips"></div>
+
+        <div class="hero__panel">
+          <div class="weather">
+            <div class="weather__title">即時天氣（台南市區）</div>
+            <div id="weatherNow" class="weather__now">載入中…</div>
+            <div id="weatherHint" class="weather__hint"></div>
+          </div>
+          <div class="quickActions">
+            <button id="btnOpenMap" class="primary">打開總覽地圖</button>
+            <button id="btnNotes" class="secondary">旅行備忘</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="days">
+        <div id="dayTabs" class="tabs"></div>
+      </section>
+
+      <section class="timeline">
+        <div class="sectionTitle">
+          <h2 id="dayTitle">行程</h2>
+          <div class="rightTools">
+            <button id="btnToggleCompact" class="pill">卡片密度：一般</button>
+          </div>
+        </div>
+        <div id="timelineList" class="timelineList"></div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer__tip">
+          小提醒：行程保留彈性。你只要點「導航」就能直接走。甜點卡會標「可嚐一口」。
+        </div>
+      </footer>
+    </main>
+
+    <!-- 簡易彈窗 -->
+    <div id="modal" class="modal hidden">
+      <div class="modal__backdrop"></div>
+      <div class="modal__card">
+        <div class="modal__head">
+          <div id="modalTitle" class="modal__title">備忘</div>
+          <button id="modalClose" class="iconBtn">✕</button>
+        </div>
+        <div id="modalBody" class="modal__body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
