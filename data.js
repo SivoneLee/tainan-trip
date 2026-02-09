@@ -1,186 +1,413 @@
-window.TRIP_DATA = {
-  title: "台南：老城散步＋花園水道＋四草綠隧（同遊）",
-  subtitle: "2/18–2/21｜提供給朋友的互動行程頁",
-  chips: ["自駕", "文青散步", "博物館可深看", "糖友友善：少量甜點"],
-  // Google Maps 總覽（你之後可換成自訂清單/我的地圖）
-  overviewMapUrl: "https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E5%8D%97%20%E6%96%87%E5%AD%B8%E9%A4%A8%20%E5%9B%9B%E8%8D%89%20%E7%B6%A0%E8%89%B2%E9%9A%A7%E9%81%93%20%E8%8A%B1%E5%9C%92%E6%B0%B4%E9%81%93%E5%8D%9A%E7%89%A9%E9%A4%A8",
-  notes: [
-    "同遊版原則：不要行軍。一天抓 2–3 個主點＋一個自由散步區。",
-    "甜點策略：只挑『大家大推』的店嚐一小份；其餘以無糖茶/黑咖啡/鹹點為主。",
-    "開車：市區移動盡量停一次用走的；熱門景點留 20–30 分鐘停車緩衝。"
-  ],
+/* data.js
+ * 2/18–2/21 台南同遊版（可直接貼進你的互動式行程網頁）
+ * 特色：主線清楚＋備選彈性（適合做「可展開」區塊）
+ */
+
+export const TRIP = {
+  meta: {
+    title: "台南同遊行程（2/18–2/21）",
+    subtitle: "同遊版｜主線清楚、備選可展開｜開車為主",
+    version: "v1.0",
+    notes: [
+      "2/18 為初二：09:00 台北集合出發，假設不塞車，午餐在台南市區。",
+      "行程以『不趕、不硬塞點』為原則；備選景點用「選 1–2 個即可」。",
+      "2/21 同遊收尾：早午餐後直接送朋友去高鐵台南站（10:57 班次）。"
+    ]
+  },
+
   days: [
+    // -------------------------
+    // 2/18（初二）
+    // -------------------------
     {
-      id: "d1",
-      label: "D1 2/18（三）",
-      title: "抵達台南｜文學館＋孔廟/府中街＋神農街夜散步",
-      items: [
+      id: "D1",
+      date: "2026-02-18",
+      title: "台北 → 台南｜午餐＋文學館＋下午散步備選",
+      themeTags: ["移動日", "老城散步", "室內為主"],
+      timeline: [
         {
-          time: "下午",
-          duration: "彈性",
-          title: "抵達台南・入住/放行李",
-          place: "住宿",
-          address: "",
-          tags: [{t:"彈性", tone:"warn"}],
-          links: []
+          time: "09:00",
+          title: "台北集合出發（國道三號南下）",
+          detail:
+            "今日假設路況不塞車；中午抵台南市區用餐後直接接下午行程。",
+          tags: ["集合", "開車"]
         },
         {
-          time: "15:00",
-          duration: "1.5–2 hr",
-          title: "國立台灣文學館",
-          place: "台南市中西區中正路1號",
-          address: "台南市中西區中正路1號",
-          tags: [{t:"室內", tone:"good"}, {t:"可深看", tone:"good"}],
-          links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E5%9C%8B%E7%AB%8B%E5%8F%B0%E7%81%A3%E6%96%87%E5%AD%B8%E9%A4%A8"}
-          ],
-          note: "朋友若體力一般：抓重點展區＋一個小展就好，不必全部看完。"
+          time: "12:30–14:00",
+          title: "台南市區午餐（不寫休息站）",
+          detail:
+            "原則：吃完順路接文學館，不跑太遠；當天看人潮與停車狀況臨場決定。",
+          tags: ["午餐", "彈性"]
         },
         {
-          time: "17:30",
-          duration: "45–75 min",
-          title: "孔廟／府中街散步（可選）",
-          place: "台南孔廟＆府中街",
-          address: "",
-          tags: [{t:"步行", tone:"warn"}, {t:"拍照", tone:"good"}],
+          time: "14:00–15:30",
+          title: "國立臺灣文學館（抓重點，不求全看）",
+          detail:
+            "台南城市脈絡入門點。建議選一個主題展＋常設重點即可，保留體力給接下來停車/入住。",
+          tags: ["室內", "重點參觀"],
           links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E5%8D%97%E5%AD%94%E5%BB%9F%20%E5%BA%9C%E4%B8%AD%E8%A1%97"}
+            {
+              label: "Google Maps 導航",
+              url: "https://www.google.com/maps/search/?api=1&query=國立臺灣文學館"
+            }
+          ]
+        },
+        {
+          time: "15:30–16:00",
+          title: "前往住宿／搶車位／放行李",
+          detail:
+            "今日的關鍵是停車與入住順利；此段優先權高於加景點。",
+          tags: ["入住", "停車優先"]
+        },
+        {
+          time: "16:00–18:00",
+          title: "下午散步備選（選 1–2 個即可）",
+          detail:
+            "這段建議做成可展開：看精神/停車/天氣決定，不強迫全走。",
+          tags: ["備選", "可展開", "彈性"],
+          options: [
+            {
+              title: "臺南美術館1館（外觀散步即可）",
+              why: "文學館附近，外觀與街廓尺度很值得看；不進館也成立。",
+              see: ["建築立面與細節", "舊城公共建築尺度", "傍晚光線拍照友善"],
+              stay: "10–20 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=臺南美術館1館"
+                }
+              ]
+            },
+            {
+              title: "司法博物館（外觀／周邊路過）",
+              why: "日治時期司法建築，路過看外觀就很有感。",
+              see: ["建築量體與軸線", "舊城街道與治理空間關係"],
+              stay: "10–15 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=司法博物館 台南"
+                }
+              ]
+            },
+            {
+              title: "藍晒圖文創園區（輕鬆走走）",
+              why: "老屋群改造的文創聚落，氛圍輕鬆，不用腦力。",
+              see: ["散步拍照", "小店逛逛", "找飲料/咖啡坐一下"],
+              stay: "30–60 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=藍晒圖文創園區"
+                }
+              ]
+            }
           ]
         },
         {
           time: "晚上",
-          duration: "彈性",
-          title: "神農街＋海安路（夜間氣氛）",
-          place: "神農街／海安路",
-          address: "",
-          tags: [{t:"文青巷弄", tone:"good"}, {t:"夜散步", tone:"good"}],
-          links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E7%A5%9E%E8%BE%B2%E8%A1%97%20%E6%B5%B7%E5%AE%89%E8%B7%AF"}
-          ],
-          note: "甜點想嚐一口可以，但先吃正餐，甜點當共享小份。"
-        }
-      ]
-    },
-
-    {
-      id: "d2",
-      label: "D2 2/19（四）",
-      title: "山上花園水道博物館（主行程）＋回市區自由",
-      items: [
-        {
-          time: "10:00",
-          duration: "2.5–3.5 hr",
-          title: "山上花園水道博物館",
-          place: "台南市山上區山上里山上16號",
-          address: "台南市山上區山上里山上16號",
-          tags: [{t:"戶外/室內", tone:"good"}, {t:"走路量中", tone:"warn"}],
-          links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E5%B1%B1%E4%B8%8A%E8%8A%B1%E5%9C%92%E6%B0%B4%E9%81%93%E5%8D%9A%E7%89%A9%E9%A4%A8"}
-          ],
-          note: "這個點很值得慢慢看：先走主園區→再視體力補展館。"
-        },
-        {
-          time: "13:30",
-          duration: "45–60 min",
-          title: "午餐（山上/新化一帶）",
-          place: "沿途找簡單好停車的店",
-          address: "",
-          tags: [{t:"補能量", tone:"good"}],
-          links: []
-        },
-        {
-          time: "下午",
-          duration: "彈性",
-          title: "回市區：咖啡/小店/休息（三選一）",
-          place: "中西區/中正路周邊",
-          address: "",
-          tags: [{t:"彈性", tone:"warn"}],
-          links: []
-        }
-      ]
-    },
-
-    {
-      id: "d3",
-      label: "D3 2/20（五）",
-      title: "四草綠色隧道＋安平/台江＋漁光島夕陽",
-      items: [
-        {
-          time: "09:30",
-          duration: "2–3 hr",
-          title: "四草綠色隧道（含排隊緩衝）",
-          place: "四草大眾廟附近",
-          address: "",
-          tags: [{t:"搭船", tone:"good"}, {t:"需排隊", tone:"warn"}],
-          links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E5%9B%9B%E8%8D%89%20%E7%B6%A0%E8%89%B2%E9%9A%A7%E9%81%93"}
-          ],
-          note: "建議早一點到；船班與排隊狀況看當天。"
-        },
-        {
-          time: "12:30",
-          duration: "1 hr",
-          title: "午餐（安平/四草一帶）",
-          place: "以好停車、上菜快為優先",
-          tags: [{t:"補能量", tone:"good"}],
-          links: []
-        },
-        {
-          time: "14:00",
-          duration: "1.5–2 hr",
-          title: "台江遊客中心 或 安平樹屋（擇一）",
-          place: "台江/安平",
-          tags: [{t:"二擇一", tone:"warn"}, {t:"走路量中", tone:"warn"}],
-          links: [
-            {label:"導航（台江遊客中心）", url:"https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E6%B1%9F%E5%9C%8B%E5%AE%B6%E5%85%AC%E5%9C%92%E7%AE%A1%E7%90%86%E8%99%95%E9%81%8A%E5%AE%A2%E4%B8%AD%E5%BF%83"},
-            {label:"導航（安平樹屋）", url:"https://www.google.com/maps/search/?api=1&query=%E5%AE%89%E5%B9%B3%E6%A8%B9%E5%B1%8B"}
-          ],
-          note: "當天如果風很大或太熱，選室內/半室內的那個。"
-        },
-        {
-          time: "17:00",
-          duration: "60–90 min",
-          title: "漁光島：夕陽散步",
-          place: "漁光島",
-          tags: [{t:"夕陽", tone:"good"}, {t:"步行", tone:"warn"}],
-          links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E6%BC%81%E5%85%89%E5%B3%B6"}
+          title: "晚餐＋自由散步（不硬排）",
+          detail:
+            "晚間保留彈性：吃飯後可回住宿休息；若精神與天氣允許，可評估 YouBike 短距離移動。",
+          tags: ["晚餐", "彈性", "YouBike可評估"],
+          options: [
+            {
+              title: "神農街（夜間散步氛圍）",
+              why: "巷弄型夜間散步很舒服，不必逛很久。",
+              see: ["老街氛圍", "小店與光線", "拍照／走走即可"],
+              stay: "30–60 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=神農街 台南"
+                }
+              ]
+            }
           ]
         }
       ]
     },
 
+    // -------------------------
+    // 2/19（初三）
+    // -------------------------
     {
-      id: "d4",
-      label: "D4 2/21（六）",
-      title: "同遊半天＋送站（10:57 高鐵）",
-      items: [
+      id: "D2",
+      date: "2026-02-19",
+      title: "花園水道博物館主日｜下午可選水交社（看體力）",
+      themeTags: ["郊外", "工程地景", "慢走"],
+      timeline: [
         {
-          time: "07:45",
-          duration: "60–75 min",
-          title: "早午餐（市區、好停車）",
-          place: "中西區/中正路附近",
-          tags: [{t:"同遊收尾", tone:"good"}],
-          links: []
-        },
-        {
-          time: "09:20",
-          duration: "50–70 min",
-          title: "開車送朋友到高鐵台南站（沙崙）",
-          place: "高鐵台南站",
-          tags: [{t:"車程", tone:"warn"}],
+          time: "上午",
+          title: "山上花園水道博物館（主行程）",
+          detail:
+            "今日只排一個大點：公共工程×建築×園區綠地。重點是慢慢走，不必每一館都看完。",
+          tags: ["主行程", "慢走"],
           links: [
-            {label:"導航", url:"https://www.google.com/maps/search/?api=1&query=%E9%AB%98%E9%90%B5%E5%8F%B0%E5%8D%97%E7%AB%99"}
-          ],
-          note: "保守抓停車＋走到月台的緩衝。"
+            {
+              label: "Google Maps 導航",
+              url: "https://www.google.com/maps/search/?api=1&query=山上花園水道博物館"
+            }
+          ]
         },
         {
-          time: "10:57",
-          duration: "固定",
-          title: "朋友高鐵：台南 → 台北（到 12:44）",
-          place: "車次 1310（停靠站）",
-          tags: [{t:"固定", tone:"good"}],
-          links: []
+          time: "午餐",
+          title: "午餐（園區附近或回市區）",
+          detail:
+            "看當天人潮與大家狀態：可就近簡單吃，或回市區再吃。",
+          tags: ["午餐", "彈性"]
+        },
+        {
+          time: "下午（可選）",
+          title: "水交社文化園區（走走型備選）",
+          detail:
+            "值不值得：值得『走走』，不是重度看展。把它當散步點比較不會失望。",
+          tags: ["備選", "散步", "看體力"],
+          links: [
+            {
+              label: "Google Maps",
+              url: "https://www.google.com/maps/search/?api=1&query=水交社文化園區"
+            }
+          ],
+          tips: [
+            "室內展館可能有午休或提早關閉；戶外園區較不受影響。",
+            "若下午想休息，就直接回住宿／自由活動。"
+          ]
+        },
+        {
+          time: "晚上",
+          title: "自由晚餐／散步",
+          detail:
+            "不加硬點，讓大家把體力留給 2/20（四草＋漁光島）。",
+          tags: ["自由", "保留體力"]
+        }
+      ]
+    },
+
+    // -------------------------
+    // 2/20（初四）
+    // -------------------------
+    {
+      id: "D3",
+      date: "2026-02-20",
+      title: "四草綠色隧道主日｜台江/安平順走｜漁光島夕陽｜安平晚餐（非海鮮）",
+      themeTags: ["水域地景", "濕地", "看夕陽", "不趕行程"],
+      timeline: [
+        {
+          time: "上午（必走）",
+          title: "四草綠色隧道（坐船）",
+          detail:
+            "今天唯一需要配合時間的行程：紅樹林水道與綠色隧道景觀。建議早一點到，光線好、也較不悶。",
+          tags: ["必走", "船班", "自然地景"],
+          links: [
+            {
+              label: "Google Maps 導航",
+              url: "https://www.google.com/maps/search/?api=1&query=四草綠色隧道"
+            }
+          ],
+          tips: ["含排隊＋搭船，抓約 1.5–2 小時。"]
+        },
+        {
+          time: "上午後段～中午（擇一）",
+          title: "同區順走（選 1 個即可）",
+          detail:
+            "四草結束後，看時間與精神狀況，選 1 個順走點，不全塞。",
+          tags: ["擇一", "彈性"],
+          options: [
+            {
+              title: "台江國家公園遊客中心（補背景、輕鬆看）",
+              stay: "30–60 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=台江國家公園遊客中心"
+                }
+              ],
+              see: ["台江濕地/潟湖背景", "室內＋戶外都可", "壓力低"]
+            },
+            {
+              title: "億載金城（戶外好走）",
+              stay: "45–60 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=億載金城"
+                }
+              ],
+              see: ["清代砲台與護城河", "城防與海岸線關係", "走起來舒服"]
+            },
+            {
+              title: "安平古堡（地標型、可只走外圍）",
+              stay: "40–60 分鐘",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=安平古堡"
+                }
+              ],
+              see: ["早期港口城市的防禦脈絡", "外圍散步也成立"]
+            }
+          ]
+        },
+        {
+          time: "中午",
+          title: "安平區午餐（簡單即可）",
+          detail:
+            "原則：不要排隊排太久、吃完不昏。店家不綁死，當天看人潮決定。",
+          tags: ["午餐", "彈性"]
+        },
+        {
+          time: "下午",
+          title: "港邊／運河散步放空（不排硬行程）",
+          detail:
+            "讓上午的濕地/船行節奏沉澱：看水、坐著聊天、慢慢走。",
+          tags: ["散步", "放空", "不趕場"]
+        },
+        {
+          time: "16:00 左右（天氣好）",
+          title: "漁光島看夕陽",
+          detail:
+            "天氣好就去走走看夕陽；若風大或下雨，直接略過回安平用餐即可。",
+          tags: ["夕陽", "看天氣"],
+          links: [
+            {
+              label: "Google Maps",
+              url: "https://www.google.com/maps/search/?api=1&query=漁光島"
+            }
+          ],
+          tips: ["停留 45–90 分鐘，視日落時間與大家狀態調整。"]
+        },
+        {
+          time: "晚上",
+          title: "安平附近晚餐（在地取向、CP值、非海鮮專門）",
+          detail:
+            "你朋友不吃海鮮：這裡挑『不靠海鮮也能吃得很好』的店型，適合多人一起吃。",
+          tags: ["晚餐", "在地取向", "非海鮮"],
+          options: [
+            {
+              title: "文章牛肉湯（安平一帶）",
+              note: "牛肉湯＋熱食很適合收尾，不吃海鮮完全OK。",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=文章牛肉湯 安平"
+                }
+              ]
+            },
+            {
+              title: "阿財牛肉湯（在地老店取向）",
+              note: "價格實在、路線偏在地；可作文章牛肉湯的替代選項。",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=阿財牛肉湯 台南"
+                }
+              ]
+            },
+            {
+              title: "再發號肉粽（台南老店）",
+              note: "肉粽＋湯類，適合不想吃太油太重口味的晚餐。",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=再發號肉粽 台南"
+                }
+              ]
+            },
+            {
+              title: "周氏（安平本店）— 不吃海鮮也有肉類/主食選擇",
+              note: "名氣大但穩定；若同行有人想嘗台南代表性小吃，可點非海鮮品項。",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=周氏蝦捲 安平本店"
+                }
+              ]
+            }
+          ],
+          tips: [
+            "過年人潮：若熱門店排隊太久，直接改吃下一個選項，不硬等。",
+            "晚餐目標是『吃得舒服』，不要為了名店把體力耗光。"
+          ]
+        }
+      ]
+    },
+
+    // -------------------------
+    // 2/21（初五）— 同遊收尾（資訊清楚版）
+    // -------------------------
+    {
+      id: "D4",
+      date: "2026-02-21",
+      title: "同遊收尾｜早午餐 → 送朋友到高鐵台南站（10:57）",
+      themeTags: ["收尾日", "資訊清楚", "不加景點"],
+      timeline: [
+        {
+          time: "上午",
+          title: "睡到自然醒／收行李（不排景點）",
+          detail:
+            "今天不加任何新景點：目標是好好吃一餐、聊完就送站。",
+          tags: ["收尾", "不趕"]
+        },
+        {
+          time: "早午餐（擇一）",
+          title: "早午餐選擇（請依時間與人潮決定）",
+          detail:
+            "原則：可坐可聊、吃完不趕行程。餐廳營業時間寫清楚如下。",
+          tags: ["餐廳", "擇一"],
+          options: [
+            {
+              title: "小北家灶咖 ZAOKA（首選）",
+              hours: "09:00–16:30",
+              note:
+                "真正早午餐、鹹食為主；適合 09:30–10:30 用餐，聊天不被時間追著跑。",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=小北家灶咖 ZAOKA 台南"
+                }
+              ]
+            },
+            {
+              title: "緩慢文旅・好好 Good Days（備選：早餐型）",
+              hours: "07:30–11:30",
+              note:
+                "偏早餐（非完整早午餐），環境舒服節奏慢；適合想早一點吃、早一點出發的情境。",
+              links: [
+                {
+                  label: "Google Maps",
+                  url: "https://www.google.com/maps/search/?api=1&query=緩慢文旅 台南 好好 Good Days"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          time: "高鐵回程（朋友）",
+          title: "送朋友到高鐵台南站（務必預留時間）",
+          detail:
+            "朋友搭乘高鐵回台北：班次時間 10:57。建議最晚 10:30 抵達高鐵台南站（取票/進站/月台預留）。",
+          tags: ["高鐵", "時間固定", "重要"],
+          travel: {
+            mode: "HSR",
+            departStation: "高鐵台南站",
+            arriveStation: "台北",
+            departTime: "10:57",
+            arriveBy: "10:30"
+          },
+          links: [
+            {
+              label: "Google Maps：高鐵台南站",
+              url: "https://www.google.com/maps/search/?api=1&query=高鐵台南站"
+            }
+          ]
+        },
+        {
+          time: "同遊結束",
+          title: "同遊行程結束（不再排其他點）",
+          detail:
+            "吃完早午餐後直接送站，行程在此自然收尾；不再安排繞路景點。",
+          tags: ["結束"]
         }
       ]
     }
