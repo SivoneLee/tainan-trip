@@ -3,7 +3,7 @@
  * 特色：主線清楚＋備選彈性（適合做「可展開」區塊）
  */
 
-export const TRIP = {
+window. TRIP = {
   meta: {
     title: "台南同遊行程（2/18–2/21）",
     subtitle: "同遊版｜主線清楚、備選可展開｜開車為主",
