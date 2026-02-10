@@ -90,6 +90,9 @@
     document.body.appendChild(el);
   };
 </script>
-<script src="./app.js"></script>
-</body>
+<script
+  src="./app.js"
+  onload="(function(){var el=document.createElement('div');el.style.cssText='position:fixed;bottom:80px;left:10px;z-index:999999;background:#14532d;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.92';el.textContent='DEBUG: app.js LOADED ✅';document.body.appendChild(el);})()"
+  onerror="(function(){var el=document.createElement('div');el.style.cssText='position:fixed;bottom:80px;left:10px;z-index:999999;background:#7f1d1d;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.92';el.textContent='DEBUG: app.js FAILED to load ❌ (404/路徑)';document.body.appendChild(el);})()"
+></script></body>
 </html>
