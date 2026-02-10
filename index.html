@@ -71,8 +71,16 @@
       </div>
     </div>
   </div>
-
   <script src="./data.js"></script>
   <script src="./app.js"></script>
+  <script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const ok = !!window.TRIP;
+    const el = document.createElement("div");
+    el.style.cssText = "position:fixed;bottom:10px;left:10px;z-index:999999;background:#000;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.85";
+    el.textContent = "DEBUG: window.TRIP = " + (ok ? "OK ✅" : "MISSING ❌");
+    document.body.appendChild(el);
+  });
+</script>
 </body>
 </html>
