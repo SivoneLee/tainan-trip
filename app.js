@@ -1,3 +1,4 @@
+const TRIP_DATA = window.TRIP_DATA || window.TRIP;
 const $ = (sel) => document.querySelector(sel);
 
 const state = {
@@ -186,8 +187,15 @@ async function loadWeather(){
 }
 
 function init(){
-  $("#tripTitle").textContent = window.TRIP_DATA.title;
-  $("#tripSubtitle").textContent = window.TRIP_DATA.subtitle;
+  // 兼容：data.js 可能是 window.TRIP 或 window.TRIP_DATA
+
+  $("#tripTitle").textContent = (TRIP_DATA && TRIP_DATA.meta && TRIP_DATA.meta.title)
+    ? TRIP_DATA.meta.title
+    : "";
+
+  $("#tripSubtitle").textContent = (TRIP_DATA && TRIP_DATA.meta && TRIP_DATA.meta.subtitle)
+    ? TRIP_DATA.meta.subtitle
+    : "";
 
   renderChips();
   renderTabs();
