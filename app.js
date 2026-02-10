@@ -191,7 +191,7 @@ function init(){
 $("#tripTitle").textContent = (TRIP_DATA.meta?.title || TRIP_DATA.title || "");
 $("#tripSubtitle").textContent = (TRIP_DATA.meta?.subtitle || TRIP_DATA.subtitle || "");
   
-  renderChips();
+  //renderChips();
   renderTabs();
   renderTimeline();
   bindUI();
