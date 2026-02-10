@@ -1,4 +1,4 @@
-const TRIP_DATA = window.TRIP_DATA || window.TRIP;
+const TRIP_DATA = TRIP_DATA || window.TRIP;
 const $ = (sel) => document.querySelector(sel);
 
 const state = {
@@ -16,7 +16,7 @@ function toneClass(tone){
 function renderChips(){
   const row = $("#chipRow");
   row.innerHTML = "";
-  window.TRIP_DATA.chips.forEach(c => {
+  TRIP_DATA.chips.forEach(c => {
     const el = document.createElement("div");
     el.className = "chip";
     el.textContent = c;
@@ -27,7 +27,7 @@ function renderChips(){
 function renderTabs(){
   const tabs = $("#dayTabs");
   tabs.innerHTML = "";
-  window.TRIP_DATA.days.forEach((d, idx) => {
+  TRIP_DATA.days.forEach((d, idx) => {
     const b = document.createElement("button");
     b.className = "tab" + (idx === state.dayIndex ? " active" : "");
     b.textContent = d.label;
@@ -51,7 +51,7 @@ function linkButton(label, url){
 }
 
 function renderTimeline(){
-  const day = window.TRIP_DATA.days[state.dayIndex];
+  const day = TRIP_DATA.days[state.dayIndex];
   $("#dayTitle").textContent = day.title;
 
   const list = $("#timelineList");
@@ -128,11 +128,11 @@ function closeModal(){
 
 function bindUI(){
   $("#btnOpenMap").addEventListener("click", () => {
-    window.open(window.TRIP_DATA.overviewMapUrl, "_blank", "noopener,noreferrer");
+    window.open(TRIP_DATA.overviewMapUrl, "_blank", "noopener,noreferrer");
   });
 
   $("#btnNotes").addEventListener("click", () => {
-    const li = window.TRIP_DATA.notes.map(n => `<li>${escapeHtml(n)}</li>`).join("");
+    const li = TRIP_DATA.notes.map(n => `<li>${escapeHtml(n)}</li>`).join("");
     showModal("旅行備忘", `<ul>${li}</ul>`);
   });
 
@@ -187,16 +187,10 @@ async function loadWeather(){
 }
 
 function init(){
-  // 兼容：data.js 可能是 window.TRIP 或 window.TRIP_DATA
-
-  $("#tripTitle").textContent = (TRIP_DATA && TRIP_DATA.meta && TRIP_DATA.meta.title)
-    ? TRIP_DATA.meta.title
-    : "";
-
-  $("#tripSubtitle").textContent = (TRIP_DATA && TRIP_DATA.meta && TRIP_DATA.meta.subtitle)
-    ? TRIP_DATA.meta.subtitle
-    : "";
-
+  // 兼容：data.js 可能是 window.TRIP 或 TRIP_DATA
+$("#tripTitle").textContent = (TRIP_DATA.meta?.title || TRIP_DATA.title || "");
+$("#tripSubtitle").textContent = (TRIP_DATA.meta?.subtitle || TRIP_DATA.subtitle || "");
+  
   renderChips();
   renderTabs();
   renderTimeline();
