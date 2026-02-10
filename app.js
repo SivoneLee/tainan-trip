@@ -197,3 +197,4 @@ function init(){
 }
 
 init();
+renderTimeline();
