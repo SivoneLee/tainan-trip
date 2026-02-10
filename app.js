@@ -1,4 +1,4 @@
-const TRIP_DATA = TRIP_DATA || window.TRIP;
+const TRIP_DATA = window.TRIP || window.TRIP_DATA;
 const $ = (sel) => document.querySelector(sel);
 
 const state = {
