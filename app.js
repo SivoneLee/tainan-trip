@@ -1,197 +1,219 @@
-const TRIP_DATA = window.TRIP || window.TRIP_DATA;
+const DATA = window.TRIP_DATA;
+
 const $ = (sel) => document.querySelector(sel);
 
 const state = {
   dayIndex: 0,
-  compact: false
+  compact: false,
 };
 
-function toneClass(tone){
-  if (tone === "good") return "good";
-  if (tone === "warn") return "warn";
-  if (tone === "bad") return "bad";
-  return "";
-}
-
-function renderChips(){
-  const row = $("#chipRow");
-  row.innerHTML = "";
-  TRIP_DATA.chips.forEach(c => {
-    const el = document.createElement("div");
-    el.className = "chip";
-    el.textContent = c;
-    row.appendChild(el);
-  });
-}
-
-function renderTabs(){
-  const tabs = $("#dayTabs");
-  tabs.innerHTML = "";
-  TRIP_DATA.days.forEach((d, idx) => {
-    const b = document.createElement("button");
-    b.className = "tab" + (idx === state.dayIndex ? " active" : "");
-    b.textContent = d.label;
-    b.addEventListener("click", () => {
-      state.dayIndex = idx;
-      renderTabs();
-      renderTimeline();
-    });
-    tabs.appendChild(b);
-  });
-}
-
-function linkButton(label, url){
-  const a = document.createElement("a");
-  a.className = "aBtn";
-  a.textContent = label;
-  a.href = url;
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
-  return a;
-}
-
-function renderTimeline(){
-  const day = TRIP_DATA.days[state.dayIndex];
-  $("#dayTitle").textContent = day.title;
-
-  const list = $("#timelineList");
-  list.innerHTML = "";
-
-  day.items.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card" + (state.compact ? " compact" : "");
-
-    const time = document.createElement("div");
-    time.className = "time";
-    time.innerHTML = `
-      <div class="t">${item.time}</div>
-      <div class="dur">${item.duration || ""}</div>
-    `;
-
-    const content = document.createElement("div");
-    content.className = "content";
-
-    const title = document.createElement("div");
-    title.className = "title";
-    title.textContent = item.title;
-
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    const placeLine = [item.place, item.address].filter(Boolean).join("｜");
-    meta.textContent = placeLine;
-
-    const tags = document.createElement("div");
-    tags.className = "tags";
-    (item.tags || []).forEach(tg => {
-      const t = document.createElement("div");
-      t.className = `tag ${toneClass(tg.tone)}`;
-      t.textContent = tg.t;
-      tags.appendChild(t);
-    });
-
-    const actions = document.createElement("div");
-    actions.className = "actions";
-    (item.links || []).forEach(l => actions.appendChild(linkButton(l.label, l.url)));
-
-    if (item.note){
-      const note = document.createElement("div");
-      note.className = "meta";
-      note.style.marginTop = "10px";
-      note.textContent = `備註：${item.note}`;
-      content.appendChild(title);
-      content.appendChild(meta);
-      content.appendChild(tags);
-      if ((item.links || []).length) content.appendChild(actions);
-      content.appendChild(note);
-    } else {
-      content.appendChild(title);
-      content.appendChild(meta);
-      content.appendChild(tags);
-      if ((item.links || []).length) content.appendChild(actions);
-    }
-
-    card.appendChild(time);
-    card.appendChild(content);
-    list.appendChild(card);
-  });
-}
-
-function showModal(title, html){
-  $("#modalTitle").textContent = title;
-  $("#modalBody").innerHTML = html;
+function openModal(title, html) {
+  $("#modalTitle").textContent = title || "";
+  $("#modalBody").innerHTML = html || "";
   $("#modal").classList.remove("hidden");
 }
 
-function closeModal(){
+function closeModal() {
   $("#modal").classList.add("hidden");
 }
 
-function bindUI(){
-  $("#btnOpenMap").addEventListener("click", () => {
-    window.open(TRIP_DATA.overviewMapUrl, "_blank", "noopener,noreferrer");
+function gmapPlaceUrl(q) {
+  const u = new URL("https://www.google.com/maps/search/");
+  u.searchParams.set("api", "1");
+  u.searchParams.set("query", q);
+  return u.toString();
+}
+
+function renderTabs() {
+  const wrap = $("#dayTabs");
+  wrap.innerHTML = "";
+  DATA.days.forEach((d, idx) => {
+    const b = document.createElement("button");
+    b.className = "tab" + (idx === state.dayIndex ? " active" : "");
+    b.textContent = d.label;
+    b.onclick = () => {
+      state.dayIndex = idx;
+      renderTabs();
+      renderTimeline();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    wrap.appendChild(b);
   });
+}
 
-  $("#btnNotes").addEventListener("click", () => {
-    const li = TRIP_DATA.notes.map(n => `<li>${escapeHtml(n)}</li>`).join("");
-    showModal("旅行備忘", `<ul>${li}</ul>`);
-  });
+function renderTimeline() {
+  const d = DATA.days[state.dayIndex];
+  const wrap = $("#timeline");
+  wrap.innerHTML = "";
 
-  $("#modalClose").addEventListener("click", closeModal);
-  $("#modal").querySelector(".modal__backdrop").addEventListener("click", closeModal);
+  d.timeline.forEach((it) => {
+    const card = document.createElement("div");
+    card.className = "item" + (state.compact ? " compact" : "");
 
-  $("#btnToggleCompact").addEventListener("click", () => {
-    state.compact = !state.compact;
-    $("#btnToggleCompact").textContent = `卡片密度：${state.compact ? "緊湊" : "一般"}`;
-    renderTimeline();
-  });
+    const top = document.createElement("div");
+    top.className = "itemTop";
 
-  $("#btnShare").addEventListener("click", async () => {
-    try{
-      await navigator.clipboard.writeText(location.href);
-      showModal("已複製連結", "<p>連結已複製到剪貼簿，可以貼給朋友。</p>");
-    }catch{
-      showModal("分享", "<p>你的瀏覽器不支援自動複製。你可以手動複製網址列連結。</p>");
+    const time = document.createElement("div");
+    time.className = "time";
+    time.textContent = it.time || "";
+
+    const titleLine = document.createElement("div");
+    titleLine.className = "titleLine";
+
+    // 標題做成可點擊：跳出詳細介紹
+    const titleBtn = document.createElement("button");
+    titleBtn.className = "titleBtn";
+    titleBtn.textContent = it.title || "（未命名）";
+    titleBtn.onclick = () => {
+      const desc = (it.modal && it.modal.desc) ? it.modal.desc : (it.detail || "");
+      const bullets = (it.modal && it.modal.bullets) ? it.modal.bullets : [];
+      const nearby = (it.modal && it.modal.nearby) ? it.modal.nearby : [];
+
+      const html = `
+        ${desc ? `<p>${desc}</p>` : ""}
+        ${bullets.length ? `<ul>${bullets.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}
+        ${nearby.length ? `<p class="muted">附近順手點（選 1–2 個就好）：</p><ul>${nearby.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}
+        ${it.mapQuery ? `<p><a class="link" target="_blank" rel="noopener" href="${gmapPlaceUrl(it.mapQuery)}">📍 Google Maps 搜尋：${it.mapQuery}</a></p>` : ""}
+      `;
+      openModal(it.title, html);
+    };
+
+    titleLine.appendChild(titleBtn);
+
+    top.appendChild(time);
+    top.appendChild(titleLine);
+    card.appendChild(top);
+
+    if (it.tags && it.tags.length) {
+      const badges = document.createElement("div");
+      badges.className = "badges";
+      it.tags.forEach((t) => {
+        const s = document.createElement("span");
+        s.className = "badge" + (t.includes("備選") ? " alt" : "");
+        s.textContent = t;
+        badges.appendChild(s);
+      });
+      card.appendChild(badges);
     }
+
+    if (it.links && it.links.length) {
+      const links = document.createElement("div");
+      links.className = "links";
+      it.links.forEach((lk) => {
+        const a = document.createElement("a");
+        a.className = "link";
+        a.href = lk.href;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = lk.label;
+        links.appendChild(a);
+      });
+      card.appendChild(links);
+    }
+
+    wrap.appendChild(card);
   });
 }
 
-function escapeHtml(str){
-  return str.replace(/[&<>"']/g, (m) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-  }[m]));
-}
-
-// --- Weather (Open-Meteo) ---
-async function loadWeather(){
-  // 台南市區座標（大約值）
+async function loadWeather() {
+  // 台南市區座標（大概值）
   const lat = 22.9997, lon = 120.2270;
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    `&current=temperature_2m,precipitation,wind_speed_10m&timezone=Asia%2FTaipei`;
 
-  // 只做「目前/近一天」即時資訊（遠期日期到出發前再看更準）
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability&timezone=Asia%2FTaipei`;
-
-  try{
+  try {
     const res = await fetch(url);
-    const data = await res.json();
-
-    const c = data.current;
+    const json = await res.json();
+    const c = json.current;
     const temp = Math.round(c.temperature_2m);
     const wind = Math.round(c.wind_speed_10m);
     const rain = c.precipitation;
 
-    $("#weatherNow").textContent = `${temp}°C｜風 ${wind} km/h｜降雨 ${rain} mm（即時）`;
-    $("#weatherHint").textContent = "提醒：出發日期較遠，預報會在接近出發時更準。";
-  }catch(e){
+    $("#weatherNow").textContent = `${temp}°C｜風 ${wind} km/h｜降雨 ${rain}`;
+    $("#weatherHint").textContent = "提醒：日期還有距離，天氣以接近出發日為準。";
+  } catch (e) {
     $("#weatherNow").textContent = "天氣載入失敗（可能被網路或瀏覽器阻擋）";
     $("#weatherHint").textContent = "";
   }
 }
 
-function init(){
-  // 兼容：data.js 可能是 window.TRIP 或 TRIP_DATA
-$("#tripTitle").textContent = (TRIP_DATA.meta?.title || TRIP_DATA.title || "");
-$("#tripSubtitle").textContent = (TRIP_DATA.meta?.subtitle || TRIP_DATA.subtitle || "");
-  
-  //renderChips();
+function bindUI() {
+  $("#btnToggleCompact").onclick = () => {
+    state.compact = !state.compact;
+    $("#btnToggleCompact").textContent = `卡片密度：${state.compact ? "精簡" : "一般"}`;
+    renderTimeline();
+  };
+
+  $("#btnOverviewMap").href = DATA.meta.overviewMapUrl || "https://www.google.com/maps";
+
+  $("#btnTips").onclick = () => {
+    const html = `
+      <p class="muted">穿著＆體感</p>
+      <ul>
+        <li><b>早晚偏涼</b>，尤其去海邊（安平/漁光島）請注意<b>防風</b>。</li>
+        <li>白天中午～下午可能偏熱：建議<b>洋蔥式穿法</b>（薄外套/風衣好用）。</li>
+      </ul>
+      <p class="muted">行程策略</p>
+      <ul>
+        <li>原則：不趕、不硬塞。備選點「選 1–2 個」就好。</li>
+        <li>點景點名稱可看詳細介紹；累了就直接跳下一個。</li>
+      </ul>
+    `;
+    openModal("旅行備忘", html);
+  };
+
+  $("#btnFood").onclick = () => {
+    const z = DATA.food.zones;
+    const zoneHtml = z.map(zone => {
+      const items = zone.items.map(it => {
+        const tags = (it.tags || []).map(t => `<span class="badge">${t}</span>`).join("");
+        return `
+          <div class="item">
+            <div class="itemTop">
+              <div class="time">🍴</div>
+              <div class="titleLine">
+                <a class="link" target="_blank" rel="noopener" href="${gmapPlaceUrl(it.query)}">${it.name}</a>
+              </div>
+            </div>
+            ${it.note ? `<p class="muted">${it.note}</p>` : ""}
+            ${tags ? `<div class="badges">${tags}</div>` : ""}
+          </div>
+        `;
+      }).join("");
+
+      return `<p class="muted">${zone.name}</p>${items}`;
+    }).join("");
+
+    const beef = DATA.food.beefSoup.map(it =>
+      `<li><a target="_blank" rel="noopener" href="${gmapPlaceUrl(it.query)}">${it.name}</a> — ${it.note || ""}</li>`
+    ).join("");
+
+    const html = `
+      <p class="muted">原則：朋友不吃海鮮，所以我挑「就算有海鮮，也一定有非海鮮餐點」的店。</p>
+      ${zoneHtml}
+      <p class="muted">牛肉湯店（可任選 1–2 家，越早越不排隊）</p>
+      <ul>${beef}</ul>
+      <p>
+        <a class="link" target="_blank" rel="noopener" href="${DATA.food.beefSoupMapUrl}">🗺️ 一鍵打開「牛肉湯」Google Maps 清單</a>
+      </p>
+    `;
+    openModal("美食清單", html);
+  };
+
+  $("#modalClose").onclick = closeModal;
+  $("#modalBackdrop").onclick = closeModal;
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+}
+
+function init() {
+  $("#tripTitle").textContent = DATA.meta.title;
+  $("#tripSubtitle").textContent = DATA.meta.subtitle;
+  $("#datePill").textContent = DATA.meta.datePill;
+
   renderTabs();
   renderTimeline();
   bindUI();
@@ -199,4 +221,3 @@ $("#tripSubtitle").textContent = (TRIP_DATA.meta?.subtitle || TRIP_DATA.subtitle
 }
 
 init();
-renderTimeline();
