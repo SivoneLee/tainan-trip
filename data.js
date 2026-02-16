@@ -2,40 +2,44 @@
 
 window.TRIP_DATA = {
   meta: {
-    title: "台南三天兩夜",
-    subtitle: "美食古蹟慢活之旅",
+    title: "2026春節台南行",
+    subtitle: "去台南走走",
     datePill: "2/18–2/21・台南同遊", // 對應 app.js 的 #datePill
     overviewMapUrl: "https://www.google.com/maps", // 總覽地圖連結
-    chips: ["美食", "攝影", "放鬆"]
+    chips: ["開車為主", "可選備案", "放鬆"]
   },
 
   days: [
     {
-      label: "Day 1",
+      label: "2/18（初二）",
       timeline: [
         {
-          time: "10:00",
-          title: "抵達台南火車站",
-          tags: ["交通"],
-          mapQuery: "台南火車站", // 對應 gmapPlaceUrl
+          time: "8:30",
+          title: "恩蘭家集合出發",
+          tags: ["集合", "交通"],
           modal: {
-            desc: "出火車站後往後站方向走，那邊有很多租車行，記得先檢查車況並拍照。",
-            bullets: ["確認租車合約", "檢查煞車與胎壓"],
-            nearby: ["大遠百", "成大校區"]
+            desc: "國道三號南下。",
+            bullets: ["假設路況不塞車；午餐直接到台南市區吃。", "保留彈性：路上若延誤，下午景點就用「擇一」策略。"],
           }
+        },
+        {
+          time: "12:30",
+          title: "台南市區午餐",
+          tags: ["午餐", "彈性"],
+          modal: {
+            desc: "到市區後再看大家想吃哪一種。",
+                   }
         },
         {
           time: "12:00",
           title: "午餐：國華街美食",
+          hint: "必吃金得春捲、富盛號碗粿",
           tags: ["美食", "排隊名店"],
-          mapQuery: "台南國華街",
-          modal: {
-            desc: "人潮眾多，建議分頭排隊。<br>推薦：富盛號碗粿、金得春捲。",
-            bullets: ["必吃：碗粿", "必吃：春捲"],
-            nearby: ["神農街", "海安路"]
-          },
-          links: [
-            { label: "富盛號介紹", href: "https://www.google.com" } // 對應 app.js 的 lk.label / lk.href
+          desc: "人潮眾多，建議分頭排隊。<br>推薦：<br>1. 富盛號碗粿<br>2. 金得春捲<br>3. 阿松割包",
+          mapUrl: "https://goo.gl/maps/example2",
+          links: [{ label: "富盛號介紹", href: "https://www.google.com" }]
+        },
+        {
           ]
         }
       ]
