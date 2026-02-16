@@ -3,60 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>台南同遊</title>
+  <title>旅行行程</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
-
 <body>
   <header class="hero">
-    <div class="wrap">
-      <div class="pill" id="datePill">2/18–2/21・台南同遊</div>
-      <h1 id="tripTitle">載入中…</h1>
-      <p class="subtitle" id="tripSubtitle">載入中…</p>
+    <div class="hero__inner">
+      <div class="hero__badge" id="heroBadge">旅行</div>
+      <h1 class="hero__title" id="tripTitle">載入中…</h1>
+      <div class="hero__subtitle" id="tripSubtitle"></div>
 
-      <div class="topGrid">
-        <div class="card weather">
-          <div class="cardTitle">即時天氣（台南市區）</div>
-          <div class="weatherNow" id="weatherNow">載入中…</div>
-          <div class="weatherHint" id="weatherHint"></div>
+      <div class="hero__row">
+        <div class="weatherCard">
+          <div class="weatherCard__title">即時天氣（台南市區）</div>
+          <div class="weatherCard__value" id="weatherNow">載入中…</div>
+          <div class="weatherCard__hint" id="weatherHint"></div>
         </div>
 
-        <div class="btnGrid">
-          <a class="btn primary" id="btnOverviewMap" target="_blank" rel="noopener">打開總覽地圖</a>
-          <button class="btn" id="btnTips">旅行備忘</button>
-          <button class="btn" id="btnFood">美食清單</button>
+        <div class="hero__actions">
+          <button class="btn btn--primary" id="btnOpenOverviewMap">打開總覽地圖</button>
+          <button class="btn" id="btnOpenNotes">旅行備忘</button>
         </div>
       </div>
+
+      <div class="chips" id="chipRow"></div>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="section">
-      <div class="sectionHead">
-        <h2>行程</h2>
-        <div class="rightTools">
-          <button class="btn small" id="btnToggleCompact">卡片密度：一般</button>
+  <main class="main">
+    <section class="panel">
+      <div class="panel__head">
+        <h2 class="panel__title">行程</h2>
+        <div class="panel__tools">
+          <button class="pill" id="btnToggleCompact">卡片密度：一般</button>
         </div>
       </div>
 
       <div class="tabs" id="dayTabs"></div>
-      <div class="timeline" id="timeline"></div>
-
-      <div class="footnote">
-        小提醒：行程保留彈性。看到喜歡就停一下；不想走就直接跳下一個點。
-      </div>
+      <div class="timeline" id="timelineList"></div>
     </section>
+
+    <section class="panel">
+      <div class="panel__head">
+        <h2 class="panel__title">美食區</h2>
+        <div class="panel__desc">已幫你優先挑「有非海鮮餐點」的店（朋友不吃海鮮也能吃）。</div>
+      </div>
+
+      <div class="tabs" id="foodTabs"></div>
+      <div class="foodList" id="foodList"></div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer__tip">小提醒：景點/店名可點開看介紹；需要導航就按「地圖」</div>
+    </footer>
   </main>
 
   <!-- Modal -->
-  <div class="modal hidden" id="modal">
-    <div class="modalBackdrop" id="modalBackdrop"></div>
-    <div class="modalCard">
-      <div class="modalHead">
-        <div class="modalTitle" id="modalTitle">標題</div>
-        <button class="iconBtn" id="modalClose">×</button>
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__card" role="dialog" aria-modal="true">
+      <div class="modal__head">
+        <div class="modal__title" id="modalTitle">內容</div>
+        <button class="iconBtn" id="modalClose" aria-label="close">×</button>
       </div>
-      <div class="modalBody" id="modalBody"></div>
+      <div class="modal__body" id="modalBody"></div>
     </div>
   </div>
 
