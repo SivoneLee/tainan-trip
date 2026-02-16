@@ -212,10 +212,7 @@ window.TRIP_DATA = {
   // 美食區：中西區 / 安平&漁光 / 牛肉湯
   // （原則：朋友不吃海鮮也有得吃）
   // -----------------------------
-    foodSections: [
-    // -----------------------------
-    // 中西區：牛肉湯＋主食友善
-    // -----------------------------
+     foodSections: [
     {
       id: "F_BEEF_CW",
       label: "中西區｜牛肉湯",
@@ -228,7 +225,7 @@ window.TRIP_DATA = {
           nonSeafoodFriendly: true,
           tags: ["牛肉湯", "名店", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E5%85%AD%E5%8D%83%E7%89%9B%E8%82%89%E6%B9%AF%20%E5%8F%B0%E5%8D%97",
-          note: "如果人潮太誇張：就直接改去「文章/友愛」這種營業時間較彈性的備案。",
+          note: "如果人潮太誇張：直接改去『友愛/文章』這種彈性型備案。",
         },
         {
           name: "石精臼牛肉湯",
@@ -238,7 +235,7 @@ window.TRIP_DATA = {
           nonSeafoodFriendly: true,
           tags: ["牛肉湯", "早晨系", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E7%9F%B3%E7%B2%BE%E8%87%BC%E7%89%9B%E8%82%89%E6%B9%AF%20%E5%8F%B0%E5%8D%97",
-          note: "很適合當作『早上收尾一餐』，但不要硬塞進晚餐。",
+          note: "適合當『早上收尾一餐』，不要硬塞晚餐。",
         },
         {
           name: "友愛牛肉湯",
@@ -248,24 +245,21 @@ window.TRIP_DATA = {
           nonSeafoodFriendly: true,
           tags: ["牛肉湯", "備案穩", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E5%8F%8B%E6%84%9B%E7%89%9B%E8%82%89%E6%B9%AF%20%E5%8F%B0%E5%8D%97",
-          note: "你們如果不想排隊排到失智，這種『穩定型』比名店更適合朋友同遊。",
+          note: "同遊版首推：不想排隊排到崩潰，就用這種『穩定型』。",
         },
         {
           name: "文章牛肉湯（東寧旗艦店）",
-          area: "偏市區（你們開車可達）",
-          short: "營業時間常較長，對行程很友善；非海鮮 OK。",
+          area: "市區（你們開車可達）",
+          short: "營業時間常較長，救援點；非海鮮 OK。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
           tags: ["牛肉湯", "時間彈性", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E6%96%87%E7%AB%A0%E7%89%9B%E8%82%89%E6%B9%AF%20%E6%9D%B1%E5%AF%A7%20%E5%8F%B0%E5%8D%97",
-          note: "你之前行程要彈性、不要被營業時間綁架，文章這種就很適合當『救援點』。",
+          note: "你要的是『不被營業時間綁架』，文章很適合當救援點。",
         },
       ],
     },
 
-    // -----------------------------
-    // 安平：牛肉湯＋附近吃法
-    // -----------------------------
     {
       id: "F_BEEF_AP",
       label: "安平｜牛肉湯",
@@ -278,27 +272,24 @@ window.TRIP_DATA = {
           nonSeafoodFriendly: true,
           tags: ["牛肉湯", "安平", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E8%B2%A1%E7%89%9B%E8%82%89%E6%B9%AF%20%E5%AE%89%E5%B9%B3%20%E5%8F%B0%E5%8D%97",
-          note: "適合你們 2/20 安平＋夕陽那天，直接在安平就地解決晚餐。",
+          note: "很適合 2/20 安平＋夕陽那天：不用再移動回市區。",
         },
         {
-          name: "（安平備案）牛肉湯搜尋：安平 牛肉湯",
+          name: "（安平備案）Google Maps 搜尋：安平 牛肉湯",
           area: "安平",
-          short: "如果名店休息/排爆：直接用這個搜尋挑最近、評價穩的。",
+          short: "名店休息/排爆：直接用搜尋挑最近、評價穩的。",
           openHours: "—",
           nonSeafoodFriendly: true,
-          tags: ["備案", "不硬塞"],
+          tags: ["備案", "不硬塞", "最省腦"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E5%AE%89%E5%B9%B3%20%E7%89%9B%E8%82%89%E6%B9%AF",
-          note: "你現在最需要的是『不要再被不確定性搞』，備案比名店更重要。",
+          note: "你最需要的是『不要再被不確定性搞』：備案比名店更重要。",
         },
       ],
     },
 
-    // -----------------------------
-    // 國華街 / 正興街：小吃密集（非海鮮主食 OK）
-    // -----------------------------
     {
       id: "F_GH",
-      label: "國華街/正興街",
+      label: "國華街/正興街｜小吃",
       items: [
         {
           name: "阿松割包",
@@ -308,11 +299,11 @@ window.TRIP_DATA = {
           nonSeafoodFriendly: true,
           tags: ["主食", "排隊名物", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E6%9D%BE%E5%89%B2%E5%8C%85%20%E5%8F%B0%E5%8D%97",
-          note: "國華街吃法：先抓一個『主食』，剩下用甜點收尾，才不會一路排到沒力氣。",
+          note: "國華街吃法：先抓『主食』，剩下用甜點收尾，才不會排隊排到沒力氣。",
         },
         {
           name: "富盛號碗粿",
-          area: "國華街/永樂市場附近",
+          area: "永樂市場附近",
           short: "碗粿＋湯類，非海鮮主食 OK。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
@@ -320,17 +311,17 @@ window.TRIP_DATA = {
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E5%AF%8C%E7%9B%9B%E8%99%9F%E7%A2%97%E7%B2%BF%20%E5%8F%B0%E5%8D%97",
         },
         {
-          name: "金得春捲（可請店家不加海鮮配料）",
+          name: "金得春捲（可客製不加海鮮/蝦）",
           area: "國華街周邊",
-          short: "春捲可客製；提醒『不要加海鮮/蝦』就能照顧朋友。",
+          short: "春捲可客製；點餐直接說『不要海鮮/不要蝦』。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
           tags: ["小吃", "可客製", "非海鮮OK"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E9%87%91%E5%BE%97%E6%98%A5%E6%8D%B2%20%E5%8F%B0%E5%8D%97",
-          note: "因為各家配料會不同，你們點餐時直接說『不要海鮮/不要蝦』最保險。",
+          note: "各家配料不同，現場直接講最保險。",
         },
         {
-          name: "修安扁擔豆花（甜點收尾）",
+          name: "修安扁擔豆花",
           area: "國華街周邊",
           short: "甜點收尾安全牌，全員友善。",
           openHours: "以 Google 地圖公告為準",
@@ -340,8 +331,8 @@ window.TRIP_DATA = {
         },
         {
           name: "蜷尾家（冰品/甜點，依分店）",
-          area: "中西區（散步路線可碰到）",
-          short: "甜點很適合你們『不想再做決策』時直接收尾。",
+          area: "中西區（散步動線可遇到）",
+          short: "甜點很適合『不想再做決策』時直接收尾。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
           tags: ["甜點", "散步收尾"],
@@ -350,17 +341,14 @@ window.TRIP_DATA = {
       ],
     },
 
-    // -----------------------------
-    // 海安路 / 神農街（藝術街氛圍）：以「坐下吃＋散步」為主
-    // -----------------------------
     {
       id: "F_HA",
       label: "海安路/神農街（藝術街）",
       items: [
         {
-          name: "小豪洲沙茶爐（海安路散步線可搭）",
-          area: "中西區（適合坐下來聊天）",
-          short: "牛/豬/丸餃類選擇多，非海鮮主食很完整。",
+          name: "小豪洲沙茶爐（坐著吃最省力）",
+          area: "中西區（海安路散步線可搭）",
+          short: "牛/豬/丸餃選擇多，非海鮮主食非常完整。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
           tags: ["坐著吃", "適合多人", "非海鮮OK"],
@@ -368,7 +356,7 @@ window.TRIP_DATA = {
         },
         {
           name: "阿明豬心冬粉（宵夜型）",
-          area: "海安路/中西區（宵夜動線好接）",
+          area: "中西區（夜晚動線好接）",
           short: "豬心/豬肝/冬粉類為主，完全非海鮮。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
@@ -376,8 +364,8 @@ window.TRIP_DATA = {
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E6%98%8E%E8%B1%AC%E5%BF%83%E5%86%AC%E7%B2%89%20%E5%8F%B0%E5%8D%97",
         },
         {
-          name: "同記安平豆花（神農街/海安路散步後收尾）",
-          area: "中西區/安平皆可（看你們當下位置）",
+          name: "同記安平豆花（散步後甜點收尾）",
+          area: "中西區/安平皆可（看你們位置）",
           short: "甜點收尾安全牌，全員友善。",
           openHours: "以 Google 地圖公告為準",
           nonSeafoodFriendly: true,
@@ -387,14 +375,15 @@ window.TRIP_DATA = {
         {
           name: "海安路散步吃法（低耗能版本）",
           area: "海安路＋神農街",
-          short: "不是指定店，是『動線』：先吃主食→走路看裝置藝術→甜點收尾。",
+          short: "先吃主食→走路看裝置藝術→甜點收尾。今天不要做太多決策。",
           openHours: "—",
           nonSeafoodFriendly: true,
           tags: ["策略", "低耗能", "不硬塞"],
           mapUrl: "https://www.google.com/maps/search/?api=1&query=%E6%B5%B7%E5%AE%89%E8%B7%AF%20%E8%97%9D%E8%A1%93%E8%A1%97%20%E5%8F%B0%E5%8D%97",
-          note: "你朋友同遊要舒服：不要用『每家都要吃』的國華街模式；海安路更適合『吃一間坐下來的＋散步』。",
+          note: "同遊要舒服：不要用『每家都要吃』的國華街模式；海安路更適合『坐下吃一間＋散步』。",
         },
       ],
     },
   ],
+
 
