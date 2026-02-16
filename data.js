@@ -22,8 +22,8 @@ window.TRIP_DATA = {
       label: "2/18（初二）",
       timeline: [
         {
-          time: "09:00",
-          title: "台北集合出發（國道三號南下）",
+          time: "08:30",
+          title: "恩蘭家集合出發（國道三號南下）",
           hint: "假設路況不塞車；午餐直接到台南市區吃。",
           tags: ["集合", "開車"],
           descHtml: `
