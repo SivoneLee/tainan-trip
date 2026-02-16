@@ -1,223 +1,310 @@
-const DATA = window.TRIP_DATA;
+(function () {
+  const TRIP_DATA = window.TRIP_DATA; // 唯一資料來源
+  const $ = (sel) => document.querySelector(sel);
 
-const $ = (sel) => document.querySelector(sel);
-
-const state = {
-  dayIndex: 0,
-  compact: false,
-};
-
-function openModal(title, html) {
-  $("#modalTitle").textContent = title || "";
-  $("#modalBody").innerHTML = html || "";
-  $("#modal").classList.remove("hidden");
-}
-
-function closeModal() {
-  $("#modal").classList.add("hidden");
-}
-
-function gmapPlaceUrl(q) {
-  const u = new URL("https://www.google.com/maps/search/");
-  u.searchParams.set("api", "1");
-  u.searchParams.set("query", q);
-  return u.toString();
-}
-
-function renderTabs() {
-  const wrap = $("#dayTabs");
-  wrap.innerHTML = "";
-  DATA.days.forEach((d, idx) => {
-    const b = document.createElement("button");
-    b.className = "tab" + (idx === state.dayIndex ? " active" : "");
-    b.textContent = d.label;
-    b.onclick = () => {
-      state.dayIndex = idx;
-      renderTabs();
-      renderTimeline();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-    wrap.appendChild(b);
-  });
-}
-
-function renderTimeline() {
-  const d = DATA.days[state.dayIndex];
-  const wrap = $("#timeline");
-  wrap.innerHTML = "";
-
-  d.timeline.forEach((it) => {
-    const card = document.createElement("div");
-    card.className = "item" + (state.compact ? " compact" : "");
-
-    const top = document.createElement("div");
-    top.className = "itemTop";
-
-    const time = document.createElement("div");
-    time.className = "time";
-    time.textContent = it.time || "";
-
-    const titleLine = document.createElement("div");
-    titleLine.className = "titleLine";
-
-    // 標題做成可點擊：跳出詳細介紹
-    const titleBtn = document.createElement("button");
-    titleBtn.className = "titleBtn";
-    titleBtn.textContent = it.title || "（未命名）";
-    titleBtn.onclick = () => {
-      const desc = (it.modal && it.modal.desc) ? it.modal.desc : (it.detail || "");
-      const bullets = (it.modal && it.modal.bullets) ? it.modal.bullets : [];
-      const nearby = (it.modal && it.modal.nearby) ? it.modal.nearby : [];
-
-      const html = `
-        ${desc ? `<p>${desc}</p>` : ""}
-        ${bullets.length ? `<ul>${bullets.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}
-        ${nearby.length ? `<p class="muted">附近順手點（選 1–2 個就好）：</p><ul>${nearby.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}
-        ${it.mapQuery ? `<p><a class="link" target="_blank" rel="noopener" href="${gmapPlaceUrl(it.mapQuery)}">📍 Google Maps 搜尋：${it.mapQuery}</a></p>` : ""}
-      `;
-      openModal(it.title, html);
-    };
-
-    titleLine.appendChild(titleBtn);
-
-    top.appendChild(time);
-    top.appendChild(titleLine);
-    card.appendChild(top);
-
-    if (it.tags && it.tags.length) {
-      const badges = document.createElement("div");
-      badges.className = "badges";
-      it.tags.forEach((t) => {
-        const s = document.createElement("span");
-        s.className = "badge" + (t.includes("備選") ? " alt" : "");
-        s.textContent = t;
-        badges.appendChild(s);
-      });
-      card.appendChild(badges);
-    }
-
-    if (it.links && it.links.length) {
-      const links = document.createElement("div");
-      links.className = "links";
-      it.links.forEach((lk) => {
-        const a = document.createElement("a");
-        a.className = "link";
-        a.href = lk.href;
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.textContent = lk.label;
-        links.appendChild(a);
-      });
-      card.appendChild(links);
-    }
-
-    wrap.appendChild(card);
-  });
-}
-
-async function loadWeather() {
-  // 台南市區座標（大概值）
-  const lat = 22.9997, lon = 120.2270;
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&current=temperature_2m,precipitation,wind_speed_10m&timezone=Asia%2FTaipei`;
-
-  try {
-    const res = await fetch(url);
-    const json = await res.json();
-    const c = json.current;
-    const temp = Math.round(c.temperature_2m);
-    const wind = Math.round(c.wind_speed_10m);
-    const rain = c.precipitation;
-
-    $("#weatherNow").textContent = `${temp}°C｜風 ${wind} km/h｜降雨 ${rain}`;
-    $("#weatherHint").textContent = "提醒：日期還有距離，天氣以接近出發日為準。";
-  } catch (e) {
-    $("#weatherNow").textContent = "天氣載入失敗（可能被網路或瀏覽器阻擋）";
-    $("#weatherHint").textContent = "";
+  if (!TRIP_DATA) {
+    alert("data.js 沒載入成功：找不到 window.TRIP_DATA");
+    return;
   }
-}
 
-function bindUI() {
-  $("#btnToggleCompact").onclick = () => {
-    state.compact = !state.compact;
-    $("#btnToggleCompact").textContent = `卡片密度：${state.compact ? "精簡" : "一般"}`;
-    renderTimeline();
+  const state = {
+    dayIndex: 0,
+    compact: false,
+    foodTab: 0,
   };
 
-  $("#btnOverviewMap").href = DATA.meta.overviewMapUrl || "https://www.google.com/maps";
-
-  $("#btnTips").onclick = () => {
-    const html = `
-      <p class="muted">穿著＆體感</p>
-      <ul>
-        <li><b>早晚偏涼</b>，尤其去海邊（安平/漁光島）請注意<b>防風</b>。</li>
-        <li>白天中午～下午可能偏熱：建議<b>洋蔥式穿法</b>（薄外套/風衣好用）。</li>
-      </ul>
-      <p class="muted">行程策略</p>
-      <ul>
-        <li>原則：不趕、不硬塞。備選點「選 1–2 個」就好。</li>
-        <li>點景點名稱可看詳細介紹；累了就直接跳下一個。</li>
-      </ul>
-    `;
-    openModal("旅行備忘", html);
-  };
-
-  $("#btnFood").onclick = () => {
-    const z = DATA.food.zones;
-    const zoneHtml = z.map(zone => {
-      const items = zone.items.map(it => {
-        const tags = (it.tags || []).map(t => `<span class="badge">${t}</span>`).join("");
-        return `
-          <div class="item">
-            <div class="itemTop">
-              <div class="time">🍴</div>
-              <div class="titleLine">
-                <a class="link" target="_blank" rel="noopener" href="${gmapPlaceUrl(it.query)}">${it.name}</a>
-              </div>
-            </div>
-            ${it.note ? `<p class="muted">${it.note}</p>` : ""}
-            ${tags ? `<div class="badges">${tags}</div>` : ""}
-          </div>
-        `;
-      }).join("");
-
-      return `<p class="muted">${zone.name}</p>${items}`;
-    }).join("");
-
-    const beef = DATA.food.beefSoup.map(it =>
-      `<li><a target="_blank" rel="noopener" href="${gmapPlaceUrl(it.query)}">${it.name}</a> — ${it.note || ""}</li>`
-    ).join("");
-
-    const html = `
-      <p class="muted">原則：朋友不吃海鮮，所以我挑「就算有海鮮，也一定有非海鮮餐點」的店。</p>
-      ${zoneHtml}
-      <p class="muted">牛肉湯店（可任選 1–2 家，越早越不排隊）</p>
-      <ul>${beef}</ul>
-      <p>
-        <a class="link" target="_blank" rel="noopener" href="${DATA.food.beefSoupMapUrl}">🗺️ 一鍵打開「牛肉湯」Google Maps 清單</a>
-      </p>
-    `;
-    openModal("美食清單", html);
-  };
-
-  $("#modalClose").onclick = closeModal;
-  $("#modalBackdrop").onclick = closeModal;
-
-  document.addEventListener("keydown", (e) => {
+  // ---------- Modal ----------
+  function openModal(title, html) {
+    $("#modalTitle").textContent = title || "內容";
+    $("#modalBody").innerHTML = html || "";
+    $("#modal").classList.remove("hidden");
+    $("#modal").setAttribute("aria-hidden", "false");
+  }
+  function closeModal() {
+    $("#modal").classList.add("hidden");
+    $("#modal").setAttribute("aria-hidden", "true");
+  }
+  $("#modalClose").addEventListener("click", closeModal);
+  $("#modal").addEventListener("click", (e) => {
+    if (e.target && e.target.dataset && e.target.dataset.close) closeModal();
+  });
+  window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
   });
-}
 
-function init() {
-  $("#tripTitle").textContent = DATA.meta.title;
-  $("#tripSubtitle").textContent = DATA.meta.subtitle;
-  $("#datePill").textContent = DATA.meta.datePill;
+  // ---------- Header ----------
+  document.title = TRIP_DATA.meta?.title || "旅行行程";
+  $("#tripTitle").textContent = TRIP_DATA.meta?.title || "旅行行程";
+  $("#tripSubtitle").textContent = TRIP_DATA.meta?.subtitle || "";
+  $("#heroBadge").textContent = TRIP_DATA.meta?.badge || "旅行";
 
-  renderTabs();
+  // Chips
+  const chipRow = $("#chipRow");
+  chipRow.innerHTML = "";
+  (TRIP_DATA.meta?.chips || []).forEach((c) => {
+    const el = document.createElement("div");
+    el.className = "chip";
+    el.textContent = c;
+    chipRow.appendChild(el);
+  });
+
+  // ---------- Buttons ----------
+  $("#btnOpenNotes").addEventListener("click", () => {
+    const notes = (TRIP_DATA.notes || [])
+      .map((t) => `<li>${escapeHtml(t)}</li>`)
+      .join("");
+    openModal("旅行備忘", `<ul>${notes}</ul>`);
+  });
+
+  $("#btnOpenOverviewMap").addEventListener("click", () => {
+    const url = TRIP_DATA.meta?.overviewMapUrl;
+    if (url) window.open(url, "_blank");
+    else openModal("總覽地圖", "尚未設定 overviewMapUrl");
+  });
+
+  $("#btnToggleCompact").addEventListener("click", () => {
+    state.compact = !state.compact;
+    $("#btnToggleCompact").textContent = state.compact ? "卡片密度：緊密" : "卡片密度：一般";
+    renderTimeline();
+    renderFood();
+  });
+
+  // ---------- Day Tabs ----------
+  function renderDayTabs() {
+    const tabs = $("#dayTabs");
+    tabs.innerHTML = "";
+    (TRIP_DATA.days || []).forEach((d, idx) => {
+      const b = document.createElement("button");
+      b.className = "tab" + (idx === state.dayIndex ? " active" : "");
+      b.textContent = d.label || d.date || `Day ${idx + 1}`;
+      b.addEventListener("click", () => {
+        state.dayIndex = idx;
+        renderDayTabs();
+        renderTimeline();
+      });
+      tabs.appendChild(b);
+    });
+  }
+
+  // ---------- Timeline ----------
+  function renderTimeline() {
+    const day = (TRIP_DATA.days || [])[state.dayIndex];
+    const list = $("#timelineList");
+    list.innerHTML = "";
+    if (!day) return;
+
+    (day.timeline || []).forEach((it) => {
+      const card = document.createElement("div");
+      card.className = "card" + (state.compact ? " compact" : "");
+
+      const top = document.createElement("div");
+      top.className = "card__top";
+
+      const t = document.createElement("div");
+      t.className = "time";
+      t.textContent = it.time || "";
+
+      const titleBox = document.createElement("div");
+      titleBox.style.flex = "1";
+
+      const h = document.createElement("div");
+      h.className = "card__title";
+      h.textContent = it.title || "(未命名)";
+
+      // 點標題：跳出介紹（避免字太滿）
+      h.addEventListener("click", () => {
+        const desc = (it.descHtml || it.desc || "").trim();
+        const extra = (it.moreHtml || "").trim();
+        const links = (it.links || [])
+          .map((l) => `<div>🔗 <a target="_blank" rel="noopener" href="${l.url}">${escapeHtml(l.text || l.url)}</a></div>`)
+          .join("");
+        openModal(
+          it.title || "內容",
+          `
+            ${desc ? `<div>${desc}</div>` : `<div style="color:#777">這個點目前沒有補充說明。</div>`}
+            ${extra ? `<hr style="border:none;border-top:1px solid rgba(0,0,0,.08);margin:12px 0" />${extra}` : ""}
+            ${links ? `<hr style="border:none;border-top:1px solid rgba(0,0,0,.08);margin:12px 0" />${links}` : ""}
+          `
+        );
+      });
+
+      const meta = document.createElement("div");
+      meta.className = "card__meta";
+      meta.textContent = it.hint || it.detail || "";
+
+      titleBox.appendChild(h);
+      if (!state.compact && meta.textContent) titleBox.appendChild(meta);
+
+      top.appendChild(t);
+      top.appendChild(titleBox);
+      card.appendChild(top);
+
+      // tags
+      if (it.tags && it.tags.length) {
+        const tags = document.createElement("div");
+        tags.className = "card__tags";
+        it.tags.forEach((x) => {
+          const tag = document.createElement("div");
+          tag.className = "tag";
+          tag.textContent = x;
+          tags.appendChild(tag);
+        });
+        card.appendChild(tags);
+      }
+
+      // actions
+      const acts = document.createElement("div");
+      acts.className = "card__actions";
+
+      if (it.mapUrl) {
+        const b = document.createElement("button");
+        b.className = "btnMini";
+        b.textContent = "地圖";
+        b.addEventListener("click", () => window.open(it.mapUrl, "_blank"));
+        acts.appendChild(b);
+      }
+
+      if (it.quickNote) {
+        const b = document.createElement("button");
+        b.className = "btnMini";
+        b.textContent = "小抄";
+        b.addEventListener("click", () => openModal(it.title || "小抄", `<div>${escapeHtml(it.quickNote)}</div>`));
+        acts.appendChild(b);
+      }
+
+      if (acts.children.length) card.appendChild(acts);
+      list.appendChild(card);
+    });
+  }
+
+  // ---------- Food Tabs ----------
+  function renderFoodTabs() {
+    const tabs = $("#foodTabs");
+    tabs.innerHTML = "";
+    (TRIP_DATA.foodSections || []).forEach((sec, idx) => {
+      const b = document.createElement("button");
+      b.className = "tab" + (idx === state.foodTab ? " active" : "");
+      b.textContent = sec.label || `美食 ${idx + 1}`;
+      b.addEventListener("click", () => {
+        state.foodTab = idx;
+        renderFoodTabs();
+        renderFood();
+      });
+      tabs.appendChild(b);
+    });
+  }
+
+  function renderFood() {
+    const sec = (TRIP_DATA.foodSections || [])[state.foodTab];
+    const box = $("#foodList");
+    box.innerHTML = "";
+    if (!sec) return;
+
+    (sec.items || []).forEach((it) => {
+      const card = document.createElement("div");
+      card.className = "card" + (state.compact ? " compact" : "");
+
+      const top = document.createElement("div");
+      top.className = "card__top";
+
+      const left = document.createElement("div");
+      left.style.flex = "1";
+
+      const title = document.createElement("div");
+      title.className = "card__title";
+      title.textContent = it.name;
+
+      title.addEventListener("click", () => {
+        const lines = [];
+        if (it.area) lines.push(`📍 ${escapeHtml(it.area)}`);
+        if (it.openHours) lines.push(`🕒 ${escapeHtml(it.openHours)}（以店家公告為準）`);
+        if (it.nonSeafoodFriendly) lines.push(`✅ 朋友不吃海鮮也有得吃`);
+        if (it.note) lines.push(`<div style="margin-top:10px">${escapeHtml(it.note)}</div>`);
+        const links = (it.links || [])
+          .map((l) => `🔗 <a target="_blank" rel="noopener" href="${l.url}">${escapeHtml(l.text || l.url)}</a>`)
+          .join("<br/>");
+
+        openModal(
+          it.name,
+          `
+            ${lines.map((x) => `<div>${x}</div>`).join("")}
+            ${links ? `<hr style="border:none;border-top:1px solid rgba(0,0,0,.08);margin:12px 0" />${links}` : ""}
+          `
+        );
+      });
+
+      const meta = document.createElement("div");
+      meta.className = "card__meta";
+      meta.textContent = it.short || "";
+
+      left.appendChild(title);
+      if (!state.compact && meta.textContent) left.appendChild(meta);
+
+      top.appendChild(left);
+      card.appendChild(top);
+
+      if (it.tags && it.tags.length) {
+        const tags = document.createElement("div");
+        tags.className = "card__tags";
+        it.tags.forEach((x) => {
+          const tag = document.createElement("div");
+          tag.className = "tag";
+          tag.textContent = x;
+          tags.appendChild(tag);
+        });
+        card.appendChild(tags);
+      }
+
+      const acts = document.createElement("div");
+      acts.className = "card__actions";
+
+      if (it.mapUrl) {
+        const b = document.createElement("button");
+        b.className = "btnMini";
+        b.textContent = "地圖";
+        b.addEventListener("click", () => window.open(it.mapUrl, "_blank"));
+        acts.appendChild(b);
+      }
+
+      if (acts.children.length) card.appendChild(acts);
+      box.appendChild(card);
+    });
+  }
+
+  // ---------- Weather ----------
+  async function loadWeather() {
+    // 台南市區
+    const lat = 22.9997, lon = 120.2270;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,precipitation&timezone=Asia%2FTaipei`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const c = data.current;
+      const temp = Math.round(c.temperature_2m);
+      const wind = Math.round(c.wind_speed_10m);
+      const rain = c.precipitation;
+      $("#weatherNow").textContent = `${temp}°C｜風 ${wind} km/h｜降雨 ${rain} mm`;
+      $("#weatherHint").textContent = TRIP_DATA.meta?.weatherHint || "";
+    } catch (e) {
+      $("#weatherNow").textContent = "天氣載入失敗（可能網路/瀏覽器阻擋）";
+      $("#weatherHint").textContent = "";
+    }
+  }
+
+  // ---------- Utils ----------
+  function escapeHtml(s) {
+    return String(s || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  // ---------- init ----------
+  renderDayTabs();
   renderTimeline();
-  bindUI();
+  renderFoodTabs();
+  renderFood();
   loadWeather();
-}
-
-init();
+})();
