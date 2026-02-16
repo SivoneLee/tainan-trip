@@ -3,96 +3,64 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>台南同遊 2/18–2/21</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- 你之後可以換字體；先用 Noto Sans TC -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>台南同遊</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body>
-  <div class="app">
-    <header class="hero">
-      <div class="hero__bg"></div>
-      <div class="hero__content">
-        <div class="hero__top">
-          <div class="badge">2/18–2/21・台南同遊</div>
-          <button id="btnShare" class="iconBtn" title="複製連結">⤴︎</button>
-        </div>
-        <h1 id="tripTitle">台南：老城散步＋水道博物館＋四草綠隧</h1>
-        <p id="tripSubtitle">朋友同遊版（可掛 GitHub Pages）</p>
-        <div id="chipRow" class="chips"></div>
+  <header class="hero">
+    <div class="wrap">
+      <div class="pill" id="datePill">2/18–2/21・台南同遊</div>
+      <h1 id="tripTitle">載入中…</h1>
+      <p class="subtitle" id="tripSubtitle">載入中…</p>
 
-        <div class="hero__panel">
-          <div class="weather">
-            <div class="weather__title">即時天氣（台南市區）</div>
-            <div id="weatherNow" class="weather__now">載入中…</div>
-            <div id="weatherHint" class="weather__hint"></div>
-          </div>
-          <div class="quickActions">
-            <button id="btnOpenMap" class="primary">打開總覽地圖</button>
-            <button id="btnNotes" class="secondary">旅行備忘</button>
-          </div>
+      <div class="topGrid">
+        <div class="card weather">
+          <div class="cardTitle">即時天氣（台南市區）</div>
+          <div class="weatherNow" id="weatherNow">載入中…</div>
+          <div class="weatherHint" id="weatherHint"></div>
         </div>
-      </div>
-    </header>
 
-    <main class="main">
-      <section class="days">
-        <div id="dayTabs" class="tabs"></div>
-      </section>
-
-      <section class="timeline">
-        <div class="sectionTitle">
-          <h2 id="dayTitle">行程</h2>
-          <div class="rightTools">
-            <button id="btnToggleCompact" class="pill">卡片密度：一般</button>
-          </div>
+        <div class="btnGrid">
+          <a class="btn primary" id="btnOverviewMap" target="_blank" rel="noopener">打開總覽地圖</a>
+          <button class="btn" id="btnTips">旅行備忘</button>
+          <button class="btn" id="btnFood">美食清單</button>
         </div>
-        <div id="timelineList" class="timelineList"></div>
-      </section>
-
-      <footer class="footer">
-        <div class="footer__tip">
-          小提醒：行程保留彈性。你只要點「導航」就能直接走。甜點卡會標「可嚐一口」。
-        </div>
-      </footer>
-    </main>
-
-    <!-- 簡易彈窗 -->
-    <div id="modal" class="modal hidden">
-      <div class="modal__backdrop"></div>
-      <div class="modal__card">
-        <div class="modal__head">
-          <div id="modalTitle" class="modal__title">備忘</div>
-          <button id="modalClose" class="iconBtn">✕</button>
-        </div>
-        <div id="modalBody" class="modal__body"></div>
       </div>
     </div>
-  </div>
-  <script src="./data.js"></script>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const ok = !!window.TRIP;
-    const el = document.createElement("div");
-    el.style.cssText =
-      "position:fixed;bottom:10px;left:10px;z-index:999999;background:#000;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.85";
-    el.textContent = "DEBUG: window.TRIP = " + (ok ? "OK ✅" : "MISSING ❌");
-    document.body.appendChild(el);
-  });
+  </header>
 
-  window.onerror = function (msg, src, line, col) {
-    const el = document.createElement("div");
-    el.style.cssText =
-      "position:fixed;bottom:45px;left:10px;z-index:999999;background:#b00020;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.95;max-width:70vw";
-    el.textContent = `JS ERROR: ${msg} @${line}:${col}`;
-    document.body.appendChild(el);
-  };
-</script>
-<script
-  src="./app.js"
-  onload="(function(){var el=document.createElement('div');el.style.cssText='position:fixed;bottom:80px;left:10px;z-index:999999;background:#14532d;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.92';el.textContent='DEBUG: app.js LOADED ✅';document.body.appendChild(el);})()"
-  onerror="(function(){var el=document.createElement('div');el.style.cssText='position:fixed;bottom:80px;left:10px;z-index:999999;background:#7f1d1d;color:#fff;padding:6px 10px;font-size:12px;border-radius:10px;opacity:.92';el.textContent='DEBUG: app.js FAILED to load ❌ (404/路徑)';document.body.appendChild(el);})()"
-></script></body>
+  <main class="wrap">
+    <section class="section">
+      <div class="sectionHead">
+        <h2>行程</h2>
+        <div class="rightTools">
+          <button class="btn small" id="btnToggleCompact">卡片密度：一般</button>
+        </div>
+      </div>
+
+      <div class="tabs" id="dayTabs"></div>
+      <div class="timeline" id="timeline"></div>
+
+      <div class="footnote">
+        小提醒：行程保留彈性。看到喜歡就停一下；不想走就直接跳下一個點。
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal hidden" id="modal">
+    <div class="modalBackdrop" id="modalBackdrop"></div>
+    <div class="modalCard">
+      <div class="modalHead">
+        <div class="modalTitle" id="modalTitle">標題</div>
+        <button class="iconBtn" id="modalClose">×</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
 </html>
